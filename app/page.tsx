@@ -16,10 +16,10 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="relative flex flex-col justify-between items-center gap-20 min-h-screen mx-auto md:p-24">
       <Suspense fallback={<div>Loading...</div>}>
-        <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-          <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
+        <div className=" flex justify-center pt-10 md:pt-0 z-10 max-w-5xl w-full lg:items-center lg:justify-between font-mono text-sm lg:flex">
+          <div className="absolute bottom-0 left-0 flex w-full items-end justify-center lg:static lg:h-auto lg:w-auto lg:bg-none">
             <a
               className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
               href="#"
@@ -32,7 +32,7 @@ export default function Home() {
           <ConnectWalletButton />
         </div>
 
-        <div className="relative flex flex-col gap-3 place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-green-200 after:via-green-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-green-700 before:dark:opacity-10 after:dark:from-green-900 after:dark:via-[#09ff01] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
+        <div className=" w-fit flex flex-col gap-3 place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[200px] md:after:w-[350px] after:translate-x-1/3 after:bg-gradient-conic after:from-green-200 after:via-green-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-green-700 before:dark:opacity-10 after:dark:from-green-900 after:dark:via-[#09ff01] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
           <span className="text-3xl font-bold">Web3 Starter template</span>
           {isConnected && (
             <span className="text-sm font-mono font-medium max-w-md text-center text-gray-500">
@@ -41,7 +41,11 @@ export default function Home() {
           )}
 
           <div className="text-sm font-mono font-medium max-w-md text-center text-gray-500">
-            Linea block number: {Number(blockNumber)}
+            {!blockNumber ? (
+              "Loading block number..."
+            ) : (
+              <div>Linea block number: {Number(blockNumber)}</div>
+            )}
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-// This is a NextJS web3 starter kit. It includes a basic web3 setup using Wagmi and Viem.
+This is a NextJS web3 starter kit. It includes a basic web3 setup using Wagmi and Viem.
 
 ## Getting Started
 

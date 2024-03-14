@@ -3,6 +3,14 @@ import { config } from "@/wagmi.config";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MetaMaskProvider } from "@metamask/sdk-react";
 
+import { createPublicClient, http } from "viem";
+import { linea } from "viem/chains";
+
+export const client = createPublicClient({
+  chain: linea,
+  transport: http(),
+});
+
 interface WagmiProviderProps {
   children: React.ReactNode;
 }

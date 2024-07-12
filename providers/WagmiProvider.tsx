@@ -1,10 +1,13 @@
-import { WagmiProvider } from "wagmi";
+"use client";
+
+import { WagmiProvider, deserialize, serialize } from "wagmi";
 import { config } from "@/wagmi.config";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { MetaMaskProvider } from "@metamask/sdk-react";
+import { QueryClient } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
 import { createPublicClient, http } from "viem";
 import { linea } from "viem/chains";
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 
 export const client = createPublicClient({
   chain: linea,
@@ -15,29 +18,34 @@ interface WagmiProviderProps {
   children: React.ReactNode;
 }
 
-const queryClient = new QueryClient();
-
 const Provider: React.FC<WagmiProviderProps> = ({ children }) => {
-  const host =
-    typeof window !== "undefined" ? window.location.host : "defaultHost";
-
-  const sdkOptions = {
-    logging: { developerMode: false },
-    checkInstallationImmediately: false,
-    dappMetadata: {
-      name: "RAD Starter",
-      url: host,
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        gcTime: 1_000 * 60 * 60 * 24, // 24 hours
+        networkMode: "offlineFirst",
+        refetchOnWindowFocus: false,
+        retry: 0,
+      },
+      mutations: { networkMode: "offlineFirst" },
     },
-  };
+  });
+
+  const persister = createSyncStoragePersister({
+    serialize,
+    storage: window.localStorage,
+    deserialize,
+  });
 
   return (
-    <MetaMaskProvider debug={false} sdkOptions={sdkOptions}>
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </WagmiProvider>
-    </MetaMaskProvider>
+    <WagmiProvider config={config}>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister }}
+      >
+        {children}
+      </PersistQueryClientProvider>
+    </WagmiProvider>
   );
 };
 
